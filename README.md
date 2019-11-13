@@ -52,8 +52,17 @@ The first endpoint we'll look at on Open Notify is the ` iss-now.json` endpoint 
 
 
 ```python
-# Your Code Here
+import requests
+resp = requests.get('http://api.open-notify.org/iss-now.json')
+resp.status_code == requests.codes.ok
 ```
+
+
+
+
+    True
+
+
 
 
 ```python
@@ -64,13 +73,39 @@ The first endpoint we'll look at on Open Notify is the ` iss-now.json` endpoint 
 
 
 ```python
-# Your Code Here
+print (resp.text)
 ```
+
+    {"message": "success", "timestamp": 1573627443, "iss_position": {"longitude": "34.7622", "latitude": "-28.8000"}}
+
 
 
 ```python
 # Interpret your results using the API
+dict(resp.headers)
 ```
+
+
+
+
+    {'Server': 'nginx/1.10.3',
+     'Date': 'Wed, 13 Nov 2019 06:44:03 GMT',
+     'Content-Type': 'application/json',
+     'Content-Length': '113',
+     'Connection': 'keep-alive',
+     'access-control-allow-origin': '*'}
+
+
+
+
+```python
+print(resp.headers['Date'])
+print(resp.headers['server'])
+```
+
+    Wed, 13 Nov 2019 06:44:03 GMT
+    nginx/1.10.3
+
 
 ### Check the next pass of International space station for a given location
 
@@ -78,8 +113,17 @@ Let's repeat the above for the second endpoint `iss-pass.json`. This end point i
 
 
 ```python
-# Your Code Here
+r = requests.get('http://api.open-notify.org/iss-pass.json')
+r.status_code
+
 ```
+
+
+
+
+    400
+
+
 
 
 ```python
@@ -105,13 +149,78 @@ Perform the following tasks :
 
 
 ```python
-# Your Code Here
+# latlong for Santa Monica, CA:
+# lat: 34.019455
+# lon: -118.491188
+
+r = requests.get('http://api.open-notify.org/iss-pass.json', {'lat':34.019455, 'lon':-118.491188})
+r.status_code
 ```
+
+
+
+
+    200
+
+
 
 
 ```python
-# Check the API and interpret your results - when will ISS pass over NEW York next ?
+# Check the API and interpret your results - when will ISS pass over SANTA MONICA next ?
+print (r.text)
 ```
+
+    {
+      "message": "success", 
+      "request": {
+        "altitude": 100, 
+        "datetime": 1573628067, 
+        "latitude": 34.019455, 
+        "longitude": -118.491188, 
+        "passes": 5
+      }, 
+      "response": [
+        {
+          "duration": 472, 
+          "risetime": 1573630487
+        }, 
+        {
+          "duration": 335, 
+          "risetime": 1573636459
+        }, 
+        {
+          "duration": 496, 
+          "risetime": 1573642279
+        }, 
+        {
+          "duration": 646, 
+          "risetime": 1573648051
+        }, 
+        {
+          "duration": 554, 
+          "risetime": 1573653883
+        }
+      ]
+    }
+    
+
+
+
+```python
+dict(r.headers)
+```
+
+
+
+
+    {'Server': 'nginx/1.10.3',
+     'Date': 'Wed, 13 Nov 2019 06:54:27 GMT',
+     'Content-Type': 'application/json',
+     'Content-Length': '529',
+     'Connection': 'keep-alive',
+     'Via': '1.1 vegur'}
+
+
 
 ### Finding the number of people in space
 
@@ -125,13 +234,42 @@ Read the above documentation and perform the following tasks:
 
 
 ```python
-# Your Code Here
+r = requests.get('http://api.open-notify.org/astros.json')
+r.status_code
 ```
+
+
+
+
+    200
+
+
 
 
 ```python
 # Interpret the Results - How many people are in space and what are their names 
+print(r.text)
 ```
+
+    {"people": [{"name": "Christina Koch", "craft": "ISS"}, {"name": "Alexander Skvortsov", "craft": "ISS"}, {"name": "Luca Parmitano", "craft": "ISS"}, {"name": "Andrew Morgan", "craft": "ISS"}, {"name": "Oleg Skripochka", "craft": "ISS"}, {"name": "Jessica Meir", "craft": "ISS"}], "number": 6, "message": "success"}
+
+
+
+```python
+dict(r.headers)
+```
+
+
+
+
+    {'Server': 'nginx/1.10.3',
+     'Date': 'Wed, 13 Nov 2019 06:57:54 GMT',
+     'Content-Type': 'application/json',
+     'Content-Length': '314',
+     'Connection': 'keep-alive',
+     'access-control-allow-origin': '*'}
+
+
 
 ## Summary 
 
